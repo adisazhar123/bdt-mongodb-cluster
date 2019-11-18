@@ -1,0 +1,26 @@
+# /etc/mongod.conf
+net:
+  port: 27017
+  bindIp: 127.0.0.1,192.168.33.15
+
+replication:
+  replSetName: rs1
+
+sharding:
+  clusterRole: “shardsvr"
+
+
+sudo systemctl restart mongod
+
+mongo -u mongo-admin -p --authenticationDatabase admin
+
+rs.initiate(  {
+      _id: "rs1",
+      version: 1,
+      members: [
+         { _id: 0, host : "mongo-shard-1:27017" },
+      ]
+   })
+
+rs.conf()
+rs.status()
